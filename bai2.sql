@@ -96,27 +96,25 @@ WHERE ho_ten = 'Lê Việt Anh';
 ---------------------------------------------
 
 -- Câu a: Lấy danh sách bạn bè làm ở công ty 'VTI', sắp xếp tên từ A-Z.
-SELECT ma_ban_be, ho_ten, email, cong_ty, ghi_chu
-FROM ban_be
-WHERE cong_ty = 'VTI'
-ORDER BY ho_ten ASC;
+select * from ban_be where cong_ty='VTI' order by ho_ten asc
 
 -- Câu b (JOIN): Lấy ra Họ tên, Số điện thoại và Tên nhóm của tất cả bạn bè thuộc nhóm 'Đồng nghiệp'.
-SELECT 
-    bb.ho_ten,
-    sdt.so_dien_thoai,
-    nqh.ten_nhom
-FROM ban_be bb
-JOIN so_dien_thoai sdt ON bb.ma_ban_be = sdt.ma_ban_be
-JOIN ban_be_nhom bbn ON bb.ma_ban_be = bbn.ma_ban_be
-JOIN nhom_quan_he nqh ON bbn.ma_nhom = nqh.ma_nhom
-WHERE nqh.ten_nhom = 'Đồng nghiệp';
+select 
+	bb.ho_ten,
+	sdt.so_dien_thoai,
+	nqh.ten_nhom
+from ban_be as bb
+inner join so_dien_thoai as sdt on bb.ma_ban_be=sdt.ma_ban_be
+inner join ban_be_nhom as bbn on bb.ma_ban_be=bbn.ma_ban_be 
+inner join nhom_quan_he as nqh on bbn.ma_nhom=nqh.ma_nhom
+where nqh.ten_nhom='Đồng nghiệp'
 
 -- Câu c (GROUP BY): Đếm số lượng bạn bè trong từng nhóm quan hệ.
-SELECT 
-    nqh.ten_nhom,
-    COUNT(bbn.ma_ban_be) AS so_luong_ban_be
-FROM nhom_quan_he nqh
-LEFT JOIN ban_be_nhom bbn ON nqh.ma_nhom = bbn.ma_nhom
-GROUP BY nqh.ma_nhom, nqh.ten_nhom
-ORDER BY so_luong_ban_be DESC;
+select 
+	nqh.ten_nhom,
+	count(bbn.ma_ban_be ) as soluongbanbe
+from nhom_quan_he as nqh
+inner join ban_be_nhom as bbn
+on nqh.ma_nhom = bbn.ma_nhom
+group by nqh.ma_nhom, nqh.ten_nhom
+order by soluongbanbe desc
